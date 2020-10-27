@@ -1,0 +1,1 @@
+Fonte utilizada: https://www.instamobile.io/react-native-tutorials/capturing-photos-and-videos-with-the-camera-in-react-native/
