@@ -36,31 +36,34 @@ class HandleForm extends React.Component {
   async handleSubmit(event) {
     let endereco = await this.createEndereco(this.state["endereco"]);
     let nome = this.state["nome"];
-	let idade = this.state["idade"];
+    let idade = this.state["idade"];
     let pessoa = new Pessoa(nome, idade, endereco);
-	console.log(endereco)
+    console.log(endereco);
     await AsyncStorage.clear();
-	await AsyncStorage.setItem("1", JSON.stringify(pessoa));
-	alert("Dados salvos localmente")
+    await AsyncStorage.setItem("1", JSON.stringify(pessoa));
+    alert("Dados salvos localmente");
   }
-  
+
   async createEndereco(endereco) {
-	let response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyB8xoaQ2tvLexzFIPbJQ0ttEHNCn1JYoHw&address=' + endereco);
-	let json = await response.json();
-	let longitude = -1;
-	let latitude = -1;
-	if(json){
-		let location = json.results[0].geometry.location;
-		latitude = location.lat;
-		longitude = location.lng;
-	}
-	
+    let response = await fetch(
+      "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyB8xoaQ2tvLexzFIPbJQ0ttEHNCn1JYoHw&address=" +
+        endereco
+    );
+    let json = await response.json();
+    let longitude = -1;
+    let latitude = -1;
+    if (json) {
+      let location = json.results[0].geometry.location;
+      latitude = location.lat;
+      longitude = location.lng;
+    }
+
     return new Endereco(endereco, longitude, latitude);
   }
 
   async handleRecovery(event) {
-	const dataRecovered = await AsyncStorage.getItem("1");
-	alert(dataRecovered);
+    const dataRecovered = await AsyncStorage.getItem("1");
+    alert(dataRecovered);
   }
 
   render() {
@@ -73,11 +76,11 @@ class HandleForm extends React.Component {
           </label>
           <label>
             Idade:
-            <input type="text" name="idade"  onChange={this.handleChange} />
+            <input type="text" name="idade" onChange={this.handleChange} />
           </label>
           <label>
             Endereço:
-            <input type="text" name="endereco"  onChange={this.handleChange} />
+            <input type="text" name="endereco" onChange={this.handleChange} />
           </label>
           <button type="button" onClick={this.handleSubmit}>
             Salvar
