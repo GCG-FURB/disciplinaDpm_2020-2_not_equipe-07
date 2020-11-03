@@ -1,0 +1,1 @@
+Fonte: https://docs.expo.io/versions/latest/sdk/accelerometer/

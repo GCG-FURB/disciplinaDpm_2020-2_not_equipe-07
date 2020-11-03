@@ -1,10 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Button, Text, TextInput } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-
-import "./styles/global.css";
-
 class Pessoa {
   constructor(nome, idade, endereco) {
     this.nome = nome;
@@ -24,15 +21,9 @@ class HandleForm extends React.Component {
     super(props);
     this.state = {};
 
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    let nam = event.target.name;
-    let val = event.target.value;
-    this.setState({ [nam]: val });
-  }
   async handleSubmit(event) {
     let endereco = await this.createEndereco(this.state["endereco"]);
     let nome = this.state["nome"];
@@ -46,13 +37,14 @@ class HandleForm extends React.Component {
 
   async createEndereco(endereco) {
     let response = await fetch(
-      "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyB8xoaQ2tvLexzFIPbJQ0ttEHNCn1JYoHw&address=" +
+      "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyA8dThs16mRcmgEuorMMnp0CuH22VQNriw&address=" +
         endereco
     );
     let json = await response.json();
     let longitude = -1;
     let latitude = -1;
     if (json) {
+      console.log(endereco)
       let location = json.results[0].geometry.location;
       latitude = location.lat;
       longitude = location.lng;
@@ -69,26 +61,32 @@ class HandleForm extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <form>
-          <label>
-            Nome:
-            <input type="text" name="nome" onChange={this.handleChange} />
-          </label>
-          <label>
-            Idade:
-            <input type="text" name="idade" onChange={this.handleChange} />
-          </label>
-          <label>
-            Endereço:
-            <input type="text" name="endereco" onChange={this.handleChange} />
-          </label>
-          <button type="button" onClick={this.handleSubmit}>
-            Salvar
-          </button>
-          <button type="button" onClick={this.handleRecovery}>
-            Recuperar
-          </button>
-        </form>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Nome"
+          onChangeText={value => this.setState({ nome: value })}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Idade"
+          onChangeText={value => this.setState({ idade: value })}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Endereço"
+          onChangeText={value => this.setState({ endereco: value })}
+        />
+        <Button 
+          style={styles.button}
+          onPress={this.handleSubmit} 
+          title="Salvar" 
+          color="#841584" />
+        <Button
+          style={styles.button}
+          onPress={this.handleRecovery}
+          title="Recuperar"
+          color="#841584"
+        />
         <StatusBar style="auto" />
       </View>
     );
@@ -105,5 +103,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  textInput: {
+    textAlign: "center",
+    borderColor: "#CCCCCC",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    width: "100%",
+    height: 50,
+    fontSize: 25,
+    margin:5,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  button: {
+    borderWidth: 1,
+    borderColor: '#007BFF',
+    backgroundColor: '#007BFF',
+    padding: 15,
+    margin: 5
   },
 });
